@@ -1,42 +1,124 @@
-
-
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import BudgetList from "./BudgetList";
-import SavingsGoalList from "./SavingsGoalList";
-import BudgetForm from "./BudgetForm";
-import SavingsGoalForm from "./SavingsGoalForm";
-import './CSS/Dashboard.css';
+import "./CSS/Dashboard.css";
 
+import Header from "./Header";
+import Footer from "./Footer";
+import CalendarComponent from "./Calendar";
+import { UserContext } from "../context/UserContext";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
-  const [showBudgetForm, setShowBudgetForm] = useState(false);
-  const [showSavingsForm, setShowSavingsForm] = useState(false);
+  const { state, dispatch } = useContext(UserContext);
 
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showOptionForm, setShowOptionForm] = useState(false);
+  const [showIncomeForm, setShowIncomeForm] = useState(false);
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [amount, setAmount] = useState(0);
+
+
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    setShowOptionForm(true);
+  };
+
+  const handleOptionSelect = (option) => {
+    setShowOptionForm(false);
+    if (option === "income") {
+      setShowIncomeForm(true);
+    } else if (option === "expense") {
+      setShowExpenseForm(true);
+    }
+  };
+
+  const handleAddIncome = () => {
+    dispatch({
+      type: "ADD_INCOME",
+      payload: { date: selectedDate, amount },
+    });
+    setShowIncomeForm(false);
+    setAmount(0);
+  };
+
+  const handleAddExpense = () => {
+    dispatch({
+      type: "ADD_EXPENSE",
+      payload: { date: selectedDate, amount },
+    });
+    setShowExpenseForm(false);
+    setAmount(0);
+  };
   if (!user) return <div>Please login to view your dashboard</div>;
-  console.log("User in Dashboard:", user);  // Debug log
+
+  const todaysIncome = state.expenses.filter(expense => expense.date === selectedDate && expense.amount > 0);
+  const todaysExpenses = state.expenses.filter(expense => expense.date === selectedDate && expense.amount < 0);
 
   return (
     <div className="dashboard">
-            <h1>Welcome, {user.username}</h1>
-            <div className="dashboard-section">
-                <h2>Budget</h2>
-                <button onClick={() => setShowBudgetForm(!showBudgetForm)}>
-                    {showBudgetForm ? 'Hide' : 'Add Budget'}
-                </button>
-                {showBudgetForm && <BudgetForm onSave={() => setShowBudgetForm(false)} />}
-                <BudgetList userId={user.id} />
-            </div>
-            <div className="dashboard-section">
-                <h2>Savings Goals</h2>
-                <button onClick={() => setShowSavingsForm(!showSavingsForm)}>
-                    {showSavingsForm ? 'Hide' : 'Add Savings Goal'}
-                </button>
-                {showSavingsForm && <SavingsGoalForm onSave={() => setShowSavingsForm(false)} />}
-                <SavingsGoalList userId={user.id} />
-            </div>
+      <Header />
+      <main>
+        <h1>Welcome, {user.username}</h1>
+        <CalendarComponent onDateClick={handleDateClick} />
+
+        {showOptionForm && (
+          <div className="modal">
+            <h2>Select an option</h2>
+            <button className="income" onClick={() => handleOptionSelect("income")}>Add Income</button>
+            <button className="expense" onClick={() => handleOptionSelect("expense")}>Add Expense</button>
+            <button onClick={() => setShowOptionForm(false)}>Cancel</button>
+          </div>
+        )}
+
+        {showIncomeForm && (
+          <div className="modal">
+            <h2>Add Income</h2>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Amount"
+            />
+            <button onClick={handleAddIncome}>Add Income</button>
+            <button onClick={() => setShowIncomeForm(false)}>Cancel</button>
+          </div>
+        )}
+
+        {showExpenseForm && (
+          <div className="modal">
+            <h2>Add Expense</h2>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Amount"
+            />
+            <button onClick={handleAddExpense}>Add Expense</button>
+            <button onClick={() => setShowExpenseForm(false)}>Cancel</button>
+          </div>
+        )}
+        <div className="todays-transactions">
+          <h2>Today's Transactions</h2>
+          <div className="transaction">
+            <h3>Income</h3>
+            <ul>
+              {todaysIncome.map((income, index) => (
+                <li key={index}>Date: {income.date}, Amount: {income.amount}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="transaction">
+            <h3>Expenses</h3>
+            <ul>
+              {todaysExpenses.map((expense, index) => (
+                <li key={index}>Date: {expense.date}, Amount: {expense.amount}</li>
+              ))}
+            </ul>
+          </div>
         </div>
+      </main>
+      <Footer />
+    </div>
   );
 };
 
