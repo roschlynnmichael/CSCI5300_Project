@@ -1,71 +1,45 @@
-// // budgetRoutes.js
-// const express = require('express');
-// const Budget = require('../models/Budget');
-// const router = express.Router();
-
-// router.post('/budget', async (req, res) => {
-//     const { userId, income, expenses } = req.body;
-//     const budget = new Budget({ userId, income, expenses });
-//     try {
-//         await budget.save();
-//         res.status(201).send(budget);
-//     } catch (error) {
-//         console.error('Error saving budget data: ', error);
-//         res.status(500).send('Error saving budget data');
-//     }
-// });
-
-// router.get('/budget/:userId', async (req, res) => {
-//     console.log('Fetching budget for userId:', req.params.userId);
-//     try {
-//         const budget = await Budget.findOne({ _id: req.params.userId }); // Changed userId to _id
-//         if (!budget) {
-//             return res.status(404).send('Budget not found');
-//         }
-//         res.send(budget);
-//     } catch (error) {
-//         console.error('Error retrieving budget data:', error);
-//         res.status(500).send('Error retrieving budget data');
-//     }
-// });
-
-// module.exports = router;
-
-
-
-
 const express = require('express');
-const Budget = require('../models/Budget');
+const User = require('../models/User'); // Make sure the path to the User model is correct
 const router = express.Router();
 
 router.post('/budget/income', async (req, res) => {
     const { userId, date, amount } = req.body;
+    console.log('In BudgetRouting JS , Received data for adding income:', req.body); // Log the received data
     try {
-        let budget = await Budget.findOne({ userId });
-        if (!budget) {
-            budget = new Budget({ userId, income: [], expenses: [] });
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
         }
-        budget.income.push({ date, amount });
-        await budget.save();
-        res.status(201).send(budget);
+        console.log('In Budjet Routes, User found:', user); // Log the user data
+        if (!user.income) {
+            user.income = []; // Initialize the income array if it doesn't exist
+        }
+        user.income.push({ date, amount });
+        await user.save();
+        res.status(201).send(user);
     } catch (error) {
-        console.error('Error adding income: ', error);
+        console.error('Error adding income:', error);
         res.status(500).send('Error adding income');
     }
 });
 
 router.post('/budget/expense', async (req, res) => {
     const { userId, date, amount } = req.body;
+    console.log('In BudgetRouting JS , Received data for adding expense:', req.body); // Log the received data
     try {
-        let budget = await Budget.findOne({ userId });
-        if (!budget) {
-            budget = new Budget({ userId, income: [], expenses: [] });
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
         }
-        budget.expenses.push({ date, amount });
-        await budget.save();
-        res.status(201).send(budget);
+        console.log('User found:', user); // Log the user data
+        if (!user.expenses) {
+            user.expenses = []; // Initialize the expenses array if it doesn't exist
+        }
+        user.expenses.push({ date, amount });
+        await user.save();
+        res.status(201).send(user);
     } catch (error) {
-        console.error('Error adding expense: ', error);
+        console.error('Error adding expense:', error);
         res.status(500).send('Error adding expense');
     }
 });

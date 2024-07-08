@@ -11,13 +11,24 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
+    console.log("here in the user context reducer. the action is : ",action)
     switch (action.type) {
         case 'SET_USER':
             localStorage.setItem('token', action.payload.token);
-            return { ...state, user: action.payload.user, token: action.payload.token };
+            console.log("in user context,  setting the user: ",action.payload.user);
+            return {
+                ...state,
+                user: action.payload.user,
+                token: action.payload.token,
+                income: action.payload.user.income || [],
+                expenses: action.payload.user.expenses || [],
+                savingsGoals:action.payload.user.savingsGoals || []
+            };
+            
         case 'LOGOUT':
             localStorage.removeItem('token');
-            return { ...state, user: null, token: null, income: [], expenses: [], savingsGoals: [] };
+            // return { ...state, user: null, token: null, income: [], expenses: [], savingsGoals: [] };
+            return initialState;
         case 'ADD_INCOME':
             return { ...state, income: [...state.income, action.payload] };
         case 'ADD_EXPENSE':
@@ -31,20 +42,23 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-
     useEffect(() => {
         if (state.token) {
-            console.log(state);
-            axios.defaults.headers.common['Authorization'] = state.token;
-
+            console.log("State after setting token: ", state);
             // Fetch user data and dispatch actions to update state
+            axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
         }
     }, [state.token]);
+
+
 
     const addIncome = async (incomeData) => {
         try {
             await axios.post('http://localhost:5001/api/income', incomeData);
+            // console.log("dispatching the amount: ",incomeData);
             dispatch({ type: 'ADD_INCOME', payload: incomeData });
+            console.log("dispatched succesfully the amount: ",incomeData);
+
         } catch (error) {
             console.error('Error adding income:', error);
         }
