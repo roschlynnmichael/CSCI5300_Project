@@ -10,21 +10,9 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
-    services:
-      mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
     - name: Checkout code
@@ -35,18 +23,50 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Install Docker on Windows
-      if: runner.os == 'Windows'
+    - name: Install dependencies
       run: |
-        choco install docker-desktop --yes
-        Restart-Service -Name com.docker.service
+        npm install
+        npm install --prefix client
 
-    - name: Install Docker on macOS
-      if: runner.os == 'macOS'
+    - name: Run backend tests
+      if: matrix.os == 'ubuntu-latest'
+      env:
+        MONGO_URL: mongodb+srv://mmohammad4:krJSeKTxgTSBlij1@se-project.zahmrjp.mongodb.net/SE-Project?retryWrites=true&w=majority
       run: |
-        brew install --cask docker
-        open /Applications/Docker.app
-        while ! docker system info > /dev/null 2>&1; do sleep 1; done
+        docker run --name mongodb -d -p 27017:27017 mongo:latest
+        sleep 20
+        npm test
+        docker stop mongodb
+        docker rm mongodb
+
+    - name: Build frontend
+      run: |
+        npm run build --prefix client
+
+    - name: Deploy
+      run: |
+        echo "Deploy steps here"
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
 
     - name: Install dependencies
       run: |
@@ -58,11 +78,3 @@ jobs:
         MONGO_URL: mongodb+srv://mmohammad4:krJSeKTxgTSBlij1@se-project.zahmrjp.mongodb.net/SE-Project?retryWrites=true&w=majority
       run: |
         npm test
-
-    - name: Build frontend
-      run: |
-        npm run build --prefix client
-
-    - name: Deploy
-      run: |
-        echo "Deploy steps here"
