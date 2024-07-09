@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-     
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -34,6 +34,19 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
+
+    - name: Install Docker on Windows
+      if: runner.os == 'Windows'
+      run: |
+        choco install docker-desktop --yes
+        Restart-Service -Name com.docker.service
+
+    - name: Install Docker on macOS
+      if: runner.os == 'macOS'
+      run: |
+        brew install --cask docker
+        open /Applications/Docker.app
+        while ! docker system info > /dev/null 2>&1; do sleep 1; done
 
     - name: Install dependencies
       run: |
