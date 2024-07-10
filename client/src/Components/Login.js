@@ -38,7 +38,7 @@ const Login = () => {
                     <h2 className="title">Sign In</h2>
                     <input className="input" type="text" placeholder="User Name" value={username} onChange={(e) => setUsername(e.target.value)} required />
                     <input className="input" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    <a className="anchor" href="#">Forgot your password?</a>
+                    <a className="anchor" href="https://www.google.com">Forgot your password?</a>
                     <button className="button" type="submit">Sign In</button>
                 </form>
             </div>
