@@ -1,0 +1,13 @@
+name: CI/CD Pipeline for CSCI5300 Project
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Latest Code from Repo
+        uses: actions/checkout@v2
+      - name: Say Hello to the World
+        run: echo "Hello, World!"
