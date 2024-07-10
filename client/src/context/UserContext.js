@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) => {
 
             // Fetch user data and dispatch actions to update state
         }
-    }, [state.token]);
+    }, [state.token, dispatch]);
 
     const addIncome = async (incomeData) => {
         try {
