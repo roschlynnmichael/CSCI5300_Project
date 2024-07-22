@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState ,useEffect} from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { UserContext } from './UserContext';
+
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+
     useEffect(() => {
         // Check for user session in localStorage
         const userData = localStorage.getItem('user');
@@ -47,4 +49,4 @@ const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-export { AuthContext, AuthProvider };
+export { AuthContext, AuthProvider};

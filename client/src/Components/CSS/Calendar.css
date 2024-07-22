@@ -5,7 +5,7 @@
   align-items: center;
   flex-direction: column;
 }
-
+/* 
 .modal {
   position: absolute;
   top: 50%;
@@ -28,4 +28,84 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.75);
+} */
+
+/* Modal container */
+.modal {
+  position: fixed;
+  top: 40%;
+  left: 77%;
+  transform: translate(-50%, -50%);
+  background-color: #d6ab7d;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 300px;
+  max-width: 80%;
+  border:1px solid #c38e70;
 }
+
+/* Modal header */
+.modal h2 {
+  text-align: center;
+  margin-top: 0;
+  font-size: 24px;
+  color: #582f0e;
+  font-family: Goudy Old Style;
+}
+
+/* Input field */
+.modal input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Buttons */
+.modal button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 5px 0;
+  border: 1px solid #582f0e;
+  border-radius: 5px;
+  font-size: 18px;
+  font-family: Goudy Old Style;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+}
+
+.modal button.income {
+  background-color: #4caf50; /* Green */
+  color: #582f0e;
+}
+
+.modal button.expense {
+  background-color: #f44336; /* Red */
+  color: #582f0e;
+}
+
+.modal button.cancel {
+  background-color: #757575; /* Gray */
+  color: #fff;
+}
+
+.modal button:hover {
+  opacity: 0.9;
+}
+
+/* Background overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+

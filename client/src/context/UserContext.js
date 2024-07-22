@@ -24,9 +24,10 @@ const reducer = (state, action) => {
                 expenses: action.payload.user.expenses || [],
                 savingsGoals:action.payload.user.savingsGoals || []
             };
-            
+               
         case 'LOGOUT':
             localStorage.removeItem('token');
+
             // return { ...state, user: null, token: null, income: [], expenses: [], savingsGoals: [] };
             return initialState;
         case 'ADD_INCOME':
@@ -41,7 +42,15 @@ const reducer = (state, action) => {
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+
     const [state, dispatch] = useReducer(reducer, initialState);
+    useEffect(() => {
+        if (state.token) {
+            console.log("State after setting token: ", state);
+            // Fetch user data and dispatch actions to update state
+            axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+        }
+    }, [state.token]);
     useEffect(() => {
         if (state.token) {
             console.log("State after setting token: ", state);
