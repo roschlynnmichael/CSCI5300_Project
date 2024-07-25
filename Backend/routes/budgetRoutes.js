@@ -3,7 +3,7 @@ const User = require('../models/User'); // Make sure the path to the User model 
 const router = express.Router();
 
 router.post('/budget/income', async (req, res) => {
-    const { userId, date, amount } = req.body;
+    const { userId, date, amount, description, frequency } = req.body;
     console.log('In BudgetRouting JS , Received data for adding income:', req.body); // Log the received data
     try {
         let user = await User.findById(userId);
@@ -14,8 +14,10 @@ router.post('/budget/income', async (req, res) => {
         if (!user.income) {
             user.income = []; // Initialize the income array if it doesn't exist
         }
-        user.income.push({ date, amount });
+        const newIncome = { date, amount, description, frequency };
+        user.income.push(newIncome);
         await user.save();
+        console.log("Data pushed to DB");
         res.status(201).send(user);
     } catch (error) {
         console.error('Error adding income:', error);
@@ -24,7 +26,7 @@ router.post('/budget/income', async (req, res) => {
 });
 
 router.post('/budget/expense', async (req, res) => {
-    const { userId, date, amount } = req.body;
+    const { userId, date, amount, description, frequency } = req.body;
     console.log('In BudgetRouting JS , Received data for adding expense:', req.body); // Log the received data
     try {
         let user = await User.findById(userId);
@@ -35,7 +37,7 @@ router.post('/budget/expense', async (req, res) => {
         if (!user.expenses) {
             user.expenses = []; // Initialize the expenses array if it doesn't exist
         }
-        user.expenses.push({ date, amount });
+        user.expenses.push({ date, amount , description, frequency });
         await user.save();
         res.status(201).send(user);
     } catch (error) {

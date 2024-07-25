@@ -1,8 +1,7 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './CSS/Calendar.css'; // Ensure you have appropriate styles for the calendar
-
+import './CSS/Calendar.css'; 
 const CalendarComponent = ({ onDateClick }) => {
   return (
     <div className="calendar-container">

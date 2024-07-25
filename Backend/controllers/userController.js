@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
 
 // Add income to user
 exports.addIncome = async (req, res) => {
-    const { date, amount } = req.body;
+    const { date, amount,description, frequency} = req.body;
     console.log("In UserController JS Received income data:", req.body);
     try {
         const user = await User.findById(req.user.id);
@@ -58,7 +58,7 @@ exports.addIncome = async (req, res) => {
         if (!user.income) {
             user.income = []; // Initialize income array if it doesn't exist
         }
-        user.income.push({ date, amount });
+        user.income.push({date, amount, description, frequency});
         await user.save();
         res.status(200).send('Income added');
     } catch (error) {
@@ -69,14 +69,14 @@ exports.addIncome = async (req, res) => {
 
 // Add expense to user
 exports.addExpense = async (req, res) => {
-    const { date, amount } = req.body;
+    const {date, amount,description, frequency} = req.body;
     console.log("In UserController JS Received expense data:", req.body);
     try {
         const user = await User.findById(req.user.id);
         if (!user.expenses) {
             user.expenses = []; // Initialize expenses array if it doesn't exist
         }
-        user.expenses.push({ date, amount });
+        user.expenses.push({date, amount, description, frequency });
         await user.save();
         res.status(200).send('Expense added');
     } catch (error) {

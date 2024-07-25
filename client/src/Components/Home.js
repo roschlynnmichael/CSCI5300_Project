@@ -11,6 +11,8 @@ const Home = ({ user }) => {
   const [showIncomeForm, setShowIncomeForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [description, setDescription] = useState("");
+  const [frequency, setFrequency] = useState("monthly");
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
@@ -31,13 +33,15 @@ const Home = ({ user }) => {
       userId: user.id,
       date: selectedDate,
       amount: parseFloat(amount),
+      description: description,
+      frequency: frequency,
     };
     axios
       .post("http://localhost:5001/api/budget/income", data)
       .then(() => {
         dispatch({
           type: "ADD_INCOME",
-          payload: { date: selectedDate, amount: parseFloat(amount) },
+          payload: { date: selectedDate, amount: parseFloat(amount), description: description, frequency: frequency },
         });
       })
       .catch((error) => {
@@ -45,6 +49,8 @@ const Home = ({ user }) => {
       });
     setShowIncomeForm(false);
     setAmount(0);
+    setDescription("");
+    setFrequency("monthly");
   };
 
   const handleAddExpense = () => {
@@ -52,13 +58,15 @@ const Home = ({ user }) => {
       userId: user.id,
       date: selectedDate,
       amount: parseFloat(amount),
+      description: description,
+      frequency: frequency,
     };
     axios
       .post("http://localhost:5001/api/budget/expense", data)
       .then(() => {
         dispatch({
           type: "ADD_EXPENSE",
-          payload: { date: selectedDate, amount: parseFloat(amount) },
+          payload: { date: selectedDate, amount: parseFloat(amount), description: description, frequency: frequency },
         });
       })
       .catch((error) => {
@@ -154,8 +162,11 @@ const Home = ({ user }) => {
               })
               .map((income, index) => (
                 <li key={index}>
-                  Date: {formatDate(income.date)}, Amount: $
-                  {income.amount.toFixed(2)}
+                  Date: {formatDate(income.date)}<br />
+                  Amount: ${income.amount.toFixed(2)}<br/>  
+                  Description:{income.description}<br/>
+                  frequency: {income.frequency}<br/>
+                  <li style={{listStyleType: "none"}}>-------------------------------------------------</li>
                 </li>
               ))}
           </ul>
@@ -209,6 +220,18 @@ const Home = ({ user }) => {
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Amount"
           />
+          <input
+            type="text" 
+            value={description} 
+            onChange={(e) => setDescription(e.target.value)} 
+            placeholder="Description" 
+          />
+          <input 
+            type="text" 
+            value={frequency} 
+            onChange={(e) => setFrequency(e.target.value)} 
+            placeholder="frequency" 
+          />
           <button className="income" onClick={handleAddIncome}>Add Income</button>
           <button onClick={() => setShowIncomeForm(false)}>Cancel</button>
         </div>
@@ -222,6 +245,18 @@ const Home = ({ user }) => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Amount"
+          />
+          <input
+            type="text" 
+            value={description} 
+            onChange={(e) => setDescription(e.target.value)} 
+            placeholder="Description" 
+          />
+          <input 
+            type="text" 
+            value={frequency} 
+            onChange={(e) => setFrequency(e.target.value)} 
+            placeholder="frequency" 
           />
           <button className="expense" onClick={handleAddExpense}>Add Expense</button>
           <button onClick={() => setShowExpenseForm(false)}>Cancel</button>
