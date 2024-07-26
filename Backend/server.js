@@ -27,13 +27,13 @@ mongoose.connect('mongodb+srv://mmohammad4:krJSeKTxgTSBlij1@se-project.zahmrjp.m
 // Routes Setup
 const authRoutes = require('./routes/auth');
 const budgetRoutes = require('./routes/budgetRoutes');
-const savingsRoutes = require('./routes/savingsRoutes');
+
 
 
 
 app.use('/auth', authRoutes);
 app.use('/api', budgetRoutes);
-app.use('/api', savingsRoutes);
+
 
 
 

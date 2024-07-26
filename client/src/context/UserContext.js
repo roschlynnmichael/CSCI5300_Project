@@ -34,6 +34,8 @@ const reducer = (state, action) => {
             return { ...state, income: [...state.income, action.payload] };
         case 'ADD_EXPENSE':
             return { ...state, expenses: [...state.expenses, action.payload] };
+        case 'ADD_GOAL':
+            return { ...state, savingsGoals: [...state.savingsGoals, action.payload] };
         default:
             return state;
     }
@@ -64,7 +66,6 @@ export const UserProvider = ({ children }) => {
     const addIncome = async (incomeData) => {
         try {
             await axios.post('http://localhost:5001/api/income', incomeData);
-            // console.log("dispatching the amount: ",incomeData);
             dispatch({ type: 'ADD_INCOME', payload: incomeData });
             console.log("dispatched succesfully the amount: ",incomeData);
 
@@ -82,8 +83,17 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const addSavingGoal = async (savingGoal) => {
+        try {
+            await axios.post('http://localhost:5001/api/saving', savingGoal);
+            dispatch({ type: 'ADD_GOAl', payload: savingGoal });
+        } catch (error) {
+            console.error('Error adding a saving goal:', error);
+        }
+    };
+
     return (
-        <UserContext.Provider value={{ state, dispatch, addIncome, addExpense }}>
+        <UserContext.Provider value={{ state, dispatch, addIncome, addExpense, addSavingGoal }}>
             {children}
         </UserContext.Provider>
     );

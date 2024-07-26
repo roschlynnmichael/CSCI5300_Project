@@ -84,3 +84,20 @@ exports.addExpense = async (req, res) => {
         res.status(500).send('Error adding expense');
     }
 };
+
+exports.addSavingsGoal = async (req, res) => {
+    const {goalName, goalAmount, allocatedPercentage} = req.body;
+    console.log("In UserController JS Received saving goal data:", req.body);
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user.savingsGoals) {
+            user.savingsGoals = []; // Initialize expenses array if it doesn't exist
+        }
+        user.savingsGoals.push({goalName, goalAmount, allocatedPercentage});
+        await user.save();
+        res.status(200).send('Expense added');
+    } catch (error) {
+        console.error('Error adding expense:', error);
+        res.status(500).send('Error adding expense');
+    }
+};
