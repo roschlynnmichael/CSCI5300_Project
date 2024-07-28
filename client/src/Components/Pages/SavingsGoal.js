@@ -8,12 +8,42 @@ const SavingsGoal = () => {
   const [goalAmount, setGoalAmount] = useState(0);
   const [goalName, setGoalName] = useState("");
   const [allocatedPercentage, setAllocatedPercentage] = useState(0);
+  const [monthlyDisposable, setMonthlyDisposable] = useState(0);
 
-  // Log the user object and savings goals to verify them
   useEffect(() => {
-    console.log("User object:", state.user);
-    console.log("Savings Goals:", state.savingsGoals);
-  }, [state.user, state.savingsGoals]);
+    const calculateMonthlyTotals = (transactions) => {
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+
+      return transactions.reduce((total, transaction) => {
+        const transactionDate = new Date(transaction.date);
+        if (
+          transactionDate.getMonth() === currentMonth &&
+          transactionDate.getFullYear() === currentYear
+        ) {
+          if (transaction.frequency === "bi-weekly") {
+            total += transaction.amount * 2;
+          } else if (transaction.frequency === "weekly") {
+            total += transaction.amount * 4;
+          } else {
+            total += transaction.amount;
+          }
+        }
+        return total;
+      }, 0);
+    };
+
+    const incomeTotal = calculateMonthlyTotals(state.income);
+    const expenseTotal = calculateMonthlyTotals(state.expenses);
+    const disposableIncome = incomeTotal - expenseTotal;
+
+    setMonthlyDisposable(disposableIncome);
+  }, [state.income, state.expenses]);
+
+  const calculateGoalTime = (amount, percentage) => {
+    const monthlyAdded = (monthlyDisposable * percentage) / 100;
+    return monthlyAdded > 0 ? Math.ceil(amount / monthlyAdded) : Infinity;
+  };
 
   const handleAddGoal = () => {
     if (!state.user || !state.user.id) {
@@ -33,7 +63,11 @@ const SavingsGoal = () => {
       .then((response) => {
         dispatch({
           type: "ADD_GOAL",
-          payload: {goalName: goalName, goalAmount: parseFloat(goalAmount), allocatedPercentage: parseFloat(allocatedPercentage)},
+          payload: {
+            goalName: goalName,
+            goalAmount: parseFloat(goalAmount),
+            allocatedPercentage: parseFloat(allocatedPercentage),
+          },
         });
       })
       .catch((error) => {
@@ -54,8 +88,9 @@ const SavingsGoal = () => {
         {state.savingsGoals.map((goal, index) => (
           <li key={index}>
             Goal Name: {goal.goalName}<br />
-            Goal Amount: ${goal.goalAmount ? goal.goalAmount.toFixed(2) : '0.00'}<br />
-            Allocated Percentage: {goal.allocatedPercentage ? goal.allocatedPercentage.toFixed(2) : '0.00'}%<br />
+            Goal Amount: ${goal.goalAmount ? goal.goalAmount.toFixed(2) : "0.00"}<br />
+            Allocated Percentage: {goal.allocatedPercentage ? goal.allocatedPercentage.toFixed(2) : "0.00"}%<br />
+            This goal will be met in {calculateGoalTime(goal.goalAmount, goal.allocatedPercentage)} months.<br />
             <li style={{ listStyleType: "none" }}>-------------------------------------------------</li>
           </li>
         ))}
@@ -85,8 +120,6 @@ const SavingsGoal = () => {
           <button onClick={() => setShowGoalForm(false)}>Cancel</button>
         </div>
       )}
-
-    
     </div>
   );
 };
