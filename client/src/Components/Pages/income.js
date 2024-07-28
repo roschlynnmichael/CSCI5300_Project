@@ -14,7 +14,23 @@ function Income({ user }) {
         transactionDate.getMonth() === currentMonth &&
         transactionDate.getFullYear() === currentYear
       ) {
-        return total + transaction.amount;
+
+        if(transaction.frequency === 'bi-weekly'){
+
+          const amountToAdd = transaction.amount * 2;
+          total = total + amountToAdd;
+        } 
+        else if(transaction.frequency === 'weekly'){
+
+          const amountToAdd = transaction.amount * 4;
+          total = total + amountToAdd;
+        }
+        else{
+
+          total = total + transaction.amount;
+        }
+
+        return total 
       }
       return total;
     }, 0);

@@ -86,7 +86,23 @@ const Home = ({ user }) => {
         transactionDate.getMonth() === currentMonth &&
         transactionDate.getFullYear() === currentYear
       ) {
-        return total + transaction.amount;
+
+        if(transaction.frequency === 'bi-weekly'){
+
+          const amountToAdd = transaction.amount * 2;
+          total = total + amountToAdd;
+        } 
+        else if(transaction.frequency === 'weekly'){
+
+          const amountToAdd = transaction.amount * 4;
+          total = total + amountToAdd;
+        }
+        else{
+
+          total = total + transaction.amount;
+        }
+
+        return total 
       }
       return total;
     }, 0);
@@ -96,21 +112,9 @@ const Home = ({ user }) => {
   const totalExpenses = calculateMonthlyTotals(state.expenses);
 
   const calculateForecast = () => {
-    const today = new Date();
-    const daysInMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      0
-    ).getDate();
-    const daysPassed = today.getDate();
-
-    const dailyIncome = totalIncome / daysPassed;
-    const dailyExpenses = totalExpenses / daysPassed;
-
-    const projectedIncome = dailyIncome * daysInMonth;
-    const projectedExpenses = dailyExpenses * daysInMonth;
-
-    const forecast = projectedIncome - projectedExpenses;
+    const projectedIncome = totalIncome;
+    const projectedExpenses = totalExpenses;
+    const forecast=(projectedIncome - projectedExpenses);
     return { projectedIncome, projectedExpenses, forecast };
   };
 
@@ -124,17 +128,6 @@ const Home = ({ user }) => {
   return (
     <div className="home">
       <CalendarComponent onDateClick={handleDateClick} />
-
-      <div className="totals">
-        <div className="total-income">
-          <h2>Total Income for this month</h2>
-          <p>${totalIncome.toFixed(2)}</p>
-        </div>
-        <div className="total-expenses">
-          <h2>Total Expenses for this month</h2>
-          <p>${totalExpenses.toFixed(2)}</p>
-        </div>
-      </div>
 
       <div className="forecast">
         <h2>Monthly Budget Forecast</h2>
@@ -184,8 +177,11 @@ const Home = ({ user }) => {
               })
               .map((expense, index) => (
                 <li key={index}>
-                  Date: {formatDate(expense.date)}, Amount: $
-                  {expense.amount.toFixed(2)}
+                  Date: {formatDate(expense.date)}<br />
+                  Amount: ${expense.amount.toFixed(2)}<br/>  
+                  Description:{expense.description}<br/>
+                  frequency: {expense.frequency}<br/>
+                  <li style={{listStyleType: "none"}}>-------------------------------------------------</li>
                 </li>
               ))}
           </ul>
