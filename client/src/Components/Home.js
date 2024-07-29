@@ -10,7 +10,7 @@ const Home = ({ user }) => {
   const [showOptionForm, setShowOptionForm] = useState(false);
   const [showIncomeForm, setShowIncomeForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [frequency, setFrequency] = useState("monthly");
 
@@ -43,14 +43,14 @@ const Home = ({ user }) => {
           type: "ADD_INCOME",
           payload: { date: selectedDate, amount: parseFloat(amount), description: description, frequency: frequency },
         });
+        setShowIncomeForm(false);
+        setAmount("");
+        setDescription("");
+        setFrequency("monthly");
       })
       .catch((error) => {
         console.error("Error adding income:", error);
       });
-    setShowIncomeForm(false);
-    setAmount(0);
-    setDescription("");
-    setFrequency("monthly");
   };
 
   const handleAddExpense = () => {
@@ -68,12 +68,14 @@ const Home = ({ user }) => {
           type: "ADD_EXPENSE",
           payload: { date: selectedDate, amount: parseFloat(amount), description: description, frequency: frequency },
         });
+        setShowExpenseForm(false);
+        setAmount("");
+        setDescription("");
+        setFrequency("monthly");
       })
       .catch((error) => {
         console.error("Error adding expense:", error);
       });
-    setShowExpenseForm(false);
-    setAmount(0);
   };
 
   const calculateMonthlyTotals = (transactions) => {
@@ -86,23 +88,15 @@ const Home = ({ user }) => {
         transactionDate.getMonth() === currentMonth &&
         transactionDate.getFullYear() === currentYear
       ) {
-
         if(transaction.frequency === 'bi-weekly'){
-
-          const amountToAdd = transaction.amount * 2;
-          total = total + amountToAdd;
+          total += transaction.amount * 2;
         } 
         else if(transaction.frequency === 'weekly'){
-
-          const amountToAdd = transaction.amount * 4;
-          total = total + amountToAdd;
+          total += transaction.amount * 4;
         }
         else{
-
-          total = total + transaction.amount;
+          total += transaction.amount;
         }
-
-        return total 
       }
       return total;
     }, 0);
@@ -114,7 +108,7 @@ const Home = ({ user }) => {
   const calculateForecast = () => {
     const projectedIncome = totalIncome;
     const projectedExpenses = totalExpenses;
-    const forecast=(projectedIncome - projectedExpenses);
+    const forecast = projectedIncome - projectedExpenses;
     return { projectedIncome, projectedExpenses, forecast };
   };
 
@@ -157,8 +151,8 @@ const Home = ({ user }) => {
                 <li key={index}>
                   Date: {formatDate(income.date)}<br />
                   Amount: ${income.amount.toFixed(2)}<br/>  
-                  Description:{income.description}<br/>
-                  frequency: {income.frequency}<br/>
+                  Description: {income.description}<br/>
+                  Frequency: {income.frequency}<br/>
                   <li style={{listStyleType: "none"}}>-------------------------------------------------</li>
                 </li>
               ))}
@@ -179,8 +173,8 @@ const Home = ({ user }) => {
                 <li key={index}>
                   Date: {formatDate(expense.date)}<br />
                   Amount: ${expense.amount.toFixed(2)}<br/>  
-                  Description:{expense.description}<br/>
-                  frequency: {expense.frequency}<br/>
+                  Description: {expense.description}<br/>
+                  Frequency: {expense.frequency}<br/>
                   <li style={{listStyleType: "none"}}>-------------------------------------------------</li>
                 </li>
               ))}
@@ -214,20 +208,22 @@ const Home = ({ user }) => {
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="Amount"
+            placeholder="Amount Earned"
           />
           <input
             type="text" 
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
-            placeholder="Description" 
+            placeholder="Income Source" 
           />
-          <input 
-            type="text" 
+          <select 
             value={frequency} 
-            onChange={(e) => setFrequency(e.target.value)} 
-            placeholder="frequency" 
-          />
+            onChange={(e) => setFrequency(e.target.value)}
+          >
+            <option value="monthly">Monthly</option>
+            <option value="bi-weekly">Bi-weekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
           <button className="income" onClick={handleAddIncome}>Add Income</button>
           <button onClick={() => setShowIncomeForm(false)}>Cancel</button>
         </div>
@@ -240,20 +236,22 @@ const Home = ({ user }) => {
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="Amount"
+            placeholder="Amount Spent"
           />
           <input
             type="text" 
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
-            placeholder="Description" 
+            placeholder="Money Spent on What" 
           />
-          <input 
-            type="text" 
+          <select 
             value={frequency} 
-            onChange={(e) => setFrequency(e.target.value)} 
-            placeholder="frequency" 
-          />
+            onChange={(e) => setFrequency(e.target.value)}
+          >
+            <option value="monthly">Monthly</option>
+            <option value="bi-weekly">Bi-weekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
           <button className="expense" onClick={handleAddExpense}>Add Expense</button>
           <button onClick={() => setShowExpenseForm(false)}>Cancel</button>
         </div>
