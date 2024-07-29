@@ -25,38 +25,31 @@ const Register = () => {
   };
 
   return (
-    // <form onSubmit={handleSubmit}>
-    //     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
-    //     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-    //     <button type="submit">Register</button>
-    // </form>
-    // <Parent>
-      <Components.Container>
-        <Components.SignUpContainer>
-          <Components.Form onSubmit={handleSubmit}>
-            <Components.Title>Create Account</Components.Title>
-            <Components.Input
-              type="text"
-              name="username"
-              placeholder="UserName"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <Components.Input type="email" name="email" placeholder="Email" />
-            <Components.Input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <Components.Button type="submit">Sign Up</Components.Button>
-          </Components.Form>
-        </Components.SignUpContainer>
-      </Components.Container>
-    // </Parent>
+    <Components.Container>
+      <Components.SignUpContainer>
+        <Components.Form onSubmit={handleSubmit} data-testid="register-form">
+          <Components.Title>Create Account</Components.Title>
+          <Components.Input
+            type="text"
+            name="username"
+            placeholder="UserName"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Components.Input type="email" name="email" placeholder="Email" />
+          <Components.Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Components.Button type="submit" disabled={!username || !password}>Sign Up</Components.Button>
+        </Components.Form>
+      </Components.SignUpContainer>
+    </Components.Container>
   );
 };
 
