@@ -16,7 +16,7 @@ const Register = () => {
       body: JSON.stringify({ username, email, password }),
     });
     if (response.ok) {
-      navigate("/");
+      navigate("/login");
       console.log("success");
     } else {
       alert("Registration failed");
@@ -27,7 +27,7 @@ const Register = () => {
     <Components.Parent>
       <Components.Container>
         <Components.SignUpContainer>
-          <Components.Form onSubmit={handleSubmit}>
+          <Components.Form onSubmit={handleSubmit} data-testid="register-form">
             <Components.Title>Create Account</Components.Title>
             <Components.Input
               type="text"
@@ -53,7 +53,7 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <Components.Button type="submit">Sign Up</Components.Button>
+            <Components.Button type="submit" disabled={!username || !password}>Sign Up</Components.Button>
             <Components.Anchor href='/'>Already have an Account? Sign in!</Components.Anchor>
           </Components.Form>
         </Components.SignUpContainer>
