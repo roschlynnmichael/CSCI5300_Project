@@ -1,4 +1,5 @@
 
+
 //next code
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -33,12 +34,6 @@ const budgetRoutes = require('./routes/budgetRoutes');
 
 app.use('/auth', authRoutes);
 app.use('/api', budgetRoutes);
-
-
-
-
-// Example route for fetching user by ID
-// app.get('/api/user/:userId', userController.getUserById);
 
 
 

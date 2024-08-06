@@ -92,4 +92,3 @@ export const Anchor = styled.a`
   margin: 15px 0;
 `;
 
-// Other components remain unchanged

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { UserContext } from '../../context/UserContext'; // Adjusted the import path
+import { UserContext } from '../../context/UserContext';
 
-function Income({ user }) {
+function Income({ user }) {   // user is the logged in user's data
   const { state } = useContext(UserContext);
 
   const calculateMonthlyTotals = (transactions) => {

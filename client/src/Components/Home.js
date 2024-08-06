@@ -4,6 +4,7 @@ import CalendarComponent from "./Calendar";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+// Home component to manage the user's budget and transactions
 const Home = ({ user }) => {
   const { state, dispatch } = useContext(UserContext);
   const [selectedDate, setSelectedDate] = useState(null);
