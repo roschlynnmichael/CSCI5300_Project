@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/User'); // Make sure the path to the User model is correct
+const User = require('../models/User'); 
 const router = express.Router();
 
 router.post('/budget/income', async (req, res) => {
@@ -58,7 +58,7 @@ router.post('/budget/saving', async (req, res) => {
         }
         console.log('User found:', user); // Log the user data
         if (!user.savingsGoals) {
-            user.savingsGoals = []; // Initialize the expenses array if it doesn't exist
+            user.savingsGoals = []; 
         }
         user.savingsGoals.push({ goalName, goalAmount, allocatedPercentage });
         await user.save();

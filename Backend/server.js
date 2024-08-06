@@ -36,12 +36,6 @@ app.use('/api', budgetRoutes);
 
 
 
-
-// Example route for fetching user by ID
-// app.get('/api/user/:userId', userController.getUserById);
-
-
-
 // Routes
 app.get('/', (req, res) => {
   res.send('Hello, World!');

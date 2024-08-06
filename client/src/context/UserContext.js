@@ -26,8 +26,6 @@ const reducer = (state, action) => {
                
         case 'LOGOUT':
             localStorage.removeItem('token');
-
-            // return { ...state, user: null, token: null, income: [], expenses: [], savingsGoals: [] };
             return initialState;
         case 'ADD_INCOME':
             return { ...state, income: [...state.income, action.payload] };

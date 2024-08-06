@@ -3,29 +3,9 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
-    income: [
-        {
-            date: { type: Date, required: true },
-            amount: { type: Number, required: true },
-            description: { type: String, required: true },
-            frequency: { type: String, required: true }
-        }
-    ],
-    expenses: [
-        {
-            date: { type: Date, required: true },
-            amount: { type: Number, required: true },
-            description: { type: String, required: true },
-            frequency: { type: String, required: true }
-        }
-    ],
-    savingsGoals: [
-        {
-            goalName: { type: String, required: true },
-            goalAmount: { type: Number, required: true },
-            allocatedPercentage: { type: Number, required: true }
-        }
-    ]
+    income: { type: String, required: true },  // Store as JSON string
+    expenses: { type: String, required: true },  // Store as JSON string
+    savingsGoals: { type: String, required: true }  // Store as JSON string
 });
 
 const User = mongoose.model('User', UserSchema);
