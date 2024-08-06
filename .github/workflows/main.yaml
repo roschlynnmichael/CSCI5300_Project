@@ -54,10 +54,9 @@ jobs:
     needs: [client, backend]  # Ensure this runs after client and backend jobs
     steps:
     - name: Deploy Frontend to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GH_PAGES_PAT }}
-        publish_dir: ./client/build  # Path to the build directory of your frontend
+      run: |
+        echo "Deploying Frontend..."
+        echo "Frontend cannot be deployed on github pages."
 
     - name: Deploy Backend (Optional)
       run: |
