@@ -56,7 +56,7 @@ jobs:
     - name: Deploy Frontend to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ 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 }}
+        github_token: ${{ secrets.GH_PAT }}
         publish_dir: ./client/build  # Path to the build directory of your frontend
 
     - name: Deploy Backend (Optional)
