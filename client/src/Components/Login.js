@@ -27,7 +27,7 @@ const Login = () => {
                 console.log("the dispatch has been succesfully completed. the data is : ",data.user);
             login({username,token:data.token});
 
-            navigate('/dashboard');
+            navigate('/dashboard/home');
             } else {
                 alert('Login failed');
             }

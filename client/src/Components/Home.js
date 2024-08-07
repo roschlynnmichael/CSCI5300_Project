@@ -3,8 +3,9 @@ import { UserContext } from "../context/UserContext";
 import CalendarComponent from "./Calendar";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Chart from "./Pages/Chart";
 
-// Home component to manage the user's budget and transactions
+
 const Home = ({ user }) => {
   const { state, dispatch } = useContext(UserContext);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -82,6 +83,7 @@ const Home = ({ user }) => {
   const calculateMonthlyTotals = (transactions) => {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
+    console.log("in calculate monthy totals methods, the transaction are :",transactions);
 
     return transactions.reduce((total, transaction) => {
       const transactionDate = new Date(transaction.date);
@@ -90,6 +92,7 @@ const Home = ({ user }) => {
         transactionDate.getFullYear() === currentYear
       ) {
         if(transaction.frequency === 'bi-weekly'){
+          console.log("the transaction amount is : ",transaction.amount);
           total += transaction.amount * 2;
         } 
         else if(transaction.frequency === 'weekly'){
@@ -102,6 +105,7 @@ const Home = ({ user }) => {
       return total;
     }, 0);
   };
+  console.log("the state total income is :",state.income);
 
   const totalIncome = calculateMonthlyTotals(state.income);
   const totalExpenses = calculateMonthlyTotals(state.expenses);
@@ -110,6 +114,7 @@ const Home = ({ user }) => {
     const projectedIncome = totalIncome;
     const projectedExpenses = totalExpenses;
     const forecast = projectedIncome - projectedExpenses;
+    console.log("the projected income and expenses are : ",totalIncome, totalExpenses);
     return { projectedIncome, projectedExpenses, forecast };
   };
 
@@ -119,6 +124,18 @@ const Home = ({ user }) => {
     const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(date).toLocaleDateString(undefined, options);
   };
+
+  // const incomeData = state.income
+  //   .filter((income) => {
+  //     const date = new Date(income.date);
+  //     return date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear();
+  //   });
+
+  // const expenseData = state.expenses
+  //   .filter((expense) => {
+  //     const date = new Date(expense.date);
+  //     return date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear();
+  //   });
 
   return (
     <div className="home">
@@ -182,6 +199,7 @@ const Home = ({ user }) => {
           </ul>
         </div>
       </div>
+      {/* <Chart incomeData={incomeData} expenseData={expenseData} /> */}
 
       {showOptionForm && (
         <div className="modal">

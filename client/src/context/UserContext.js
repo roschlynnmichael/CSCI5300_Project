@@ -59,9 +59,6 @@ export const UserProvider = ({ children }) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
         }
     }, [state.token]);
-
-
-
     const addIncome = async (incomeData) => {
         try {
             await axios.post('http://localhost:5001/api/income', incomeData);
