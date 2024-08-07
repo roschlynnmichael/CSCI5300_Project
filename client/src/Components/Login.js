@@ -3,7 +3,6 @@ import { UserContext } from '../context/UserContext';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import * as Components from '../Components/Components';
-import './CSS/Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -39,17 +38,21 @@ const Login = () => {
     };
 
     return (
-        <div className="container">
-            <div className="signInContainer">
-                <form className="form" onSubmit={handleSubmit}>
-                    <h2 className="title">Sign In</h2>
-                    <input className="input" type="text" placeholder="User Name" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                    <input className="input" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    <a className="anchor" href="#">Forgot your password?</a>
-                    <button className="button" type="submit">Sign In</button>
-                </form>
-            </div>
-        </div>
+        <Components.Parent>
+            <Components.Container>
+                <Components.SignInContainer>
+                    <Components.Form onSubmit={handleSubmit} data-testid="login-form">
+                        <Components.Title>Sign In</Components.Title>
+                        <Components.Input type='text' name='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        <Components.Input type='password' name='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <Components.Anchor href = "register">Don't have an account? Sign Up!</Components.Anchor>
+                        <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
+                        <Components.Button type="submit" disabled={!username || !password}>Sign In</Components.Button>
+                    </Components.Form>
+                </Components.SignInContainer>
+            </Components.Container>
+        </Components.Parent>
+
     );
 };
 

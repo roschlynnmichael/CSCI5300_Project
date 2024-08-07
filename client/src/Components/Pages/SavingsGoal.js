@@ -5,10 +5,12 @@ import axios from "axios";
 const SavingsGoal = () => {
   const { state, dispatch } = useContext(UserContext);
   const [showGoalForm, setShowGoalForm] = useState(false);
-  const [goalAmount, setGoalAmount] = useState(0);
+  const [goalAmount, setGoalAmount] = useState("");
   const [goalName, setGoalName] = useState("");
-  const [allocatedPercentage, setAllocatedPercentage] = useState(0);
+  const [allocatedPercentage, setAllocatedPercentage] = useState("");
   const [monthlyDisposable, setMonthlyDisposable] = useState(0);
+  const [showInfoBox, setShowInfoBox] = useState(false);
+  const [infoBoxMessage, setInfoBoxMessage] = useState("");
 
   useEffect(() => {
     const calculateMonthlyTotals = (transactions) => {
@@ -45,9 +47,58 @@ const SavingsGoal = () => {
     return monthlyAdded > 0 ? Math.ceil(amount / monthlyAdded) : Infinity;
   };
 
+  const validatePercentage = (value) => {
+    const parsedValue = parseFloat(value);
+    if (isNaN(parsedValue) || parsedValue <= 0 || parsedValue > 100) {
+      setInfoBoxMessage("Allocated Percentage must be between 0% and 100%.");
+      setShowInfoBox(true);
+      return false;
+    }
+    return true;
+  };
+
+  const validateGoalAmount = (value) => {
+    const parsedValue = parseFloat(value);
+    if (isNaN(parsedValue) || parsedValue <= 0) {
+      setInfoBoxMessage("Goal Amount must be greater than zero.");
+      setShowInfoBox(true);
+      return false;
+    }
+    return true;
+  };
+
+  const handleInfoBoxClose = () => {
+    setShowInfoBox(false);
+    setInfoBoxMessage("");
+  };
+
+  const handlePercentageChange = (e) => {
+    const value = e.target.value;
+    setAllocatedPercentage(value);
+    if (value !== "") {
+      validatePercentage(value);
+    } else {
+      setShowInfoBox(false);
+    }
+  };
+
+  const handleGoalAmountChange = (e) => {
+    const value = e.target.value;
+    setGoalAmount(value);
+    if (value !== "") {
+      validateGoalAmount(value);
+    } else {
+      setShowInfoBox(false);
+    }
+  };
+
   const handleAddGoal = () => {
     if (!state.user || !state.user.id) {
       console.error("User object or user.id is undefined");
+      return;
+    }
+
+    if (!validatePercentage(allocatedPercentage) || !validateGoalAmount(goalAmount)) {
       return;
     }
 
@@ -69,21 +120,20 @@ const SavingsGoal = () => {
             allocatedPercentage: parseFloat(allocatedPercentage),
           },
         });
+        setGoalAmount("");
+        setGoalName("");
+        setAllocatedPercentage("");
+        setShowGoalForm(false);
       })
       .catch((error) => {
         console.error("Error adding goal:", error);
       });
-
-    setGoalAmount(0);
-    setGoalName("");
-    setAllocatedPercentage(0);
-    setShowGoalForm(false);
   };
 
   return (
     <div>
       <h1>Savings Goals:</h1>
-      <button onClick={() => setShowGoalForm(true)}>Add a Savings Goal</button>
+      <button className="add-goal-button" onClick={() => setShowGoalForm(true)}>Add a Savings Goal</button>
       <ul>
         {state.savingsGoals.map((goal, index) => (
           <li key={index}>
@@ -107,17 +157,28 @@ const SavingsGoal = () => {
           <input
             type="number"
             value={goalAmount}
-            onChange={(e) => setGoalAmount(e.target.value)}
+            onChange={handleGoalAmountChange}
             placeholder="Enter Target Amount"
+            min="0.01"
+            step="0.01"
           />
           <input
             type="number"
             value={allocatedPercentage}
-            onChange={(e) => setAllocatedPercentage(e.target.value)}
+            onChange={handlePercentageChange}
             placeholder="Allocated Percentage"
+            min="0.01"
+            max="100"
+            step="0.01"
           />
           <button className="goal" onClick={handleAddGoal}>Add Savings Goal</button>
           <button onClick={() => setShowGoalForm(false)}>Cancel</button>
+        </div>
+      )}
+      {showInfoBox && (
+        <div className="info-box">
+          <p>{infoBoxMessage}</p>
+          <button onClick={handleInfoBoxClose}>OK</button>
         </div>
       )}
     </div>

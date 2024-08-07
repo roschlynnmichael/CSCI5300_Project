@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
         if (userData) {
             const parsedUserData = JSON.parse(userData);
             const decodedToken = jwtDecode(parsedUserData.token);
-            const userId = decodedToken.id; // Make sure your token payload includes 'id'
+            const userId = decodedToken.id; 
             setUser({ ...parsedUserData, id: userId });
         }
     }, []);
@@ -24,16 +24,7 @@ const AuthProvider = ({ children }) => {
         const userId = decodedToken.id;
         localStorage.setItem('user', JSON.stringify(userData));
         setUser({ ...userData, id: userId });
-        // dispatch({
-        //     type: 'SET_USER',
-        //     payload: {
-        //         user: { ...userData, id: userId },
-        //         token: userData.token,
-        //         income: userData.user.income,
-        //         expenses: userData.user.expenses,
-        //         savingsGoals: userData.user.savingsGoals,
-        //     }
-        // });
+       
     };
     
 

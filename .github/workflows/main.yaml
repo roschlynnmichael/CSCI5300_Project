@@ -1,17 +1,3 @@
-# name: CI/CD Pipeline for CSCI5300 Project
-# on:
-#   push:
-#     branches:
-#       - main
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Get Latest Code from Repo
-#         uses: actions/checkout@v2
-#       - name: Say Hello to the World
-#         run: echo "Hello, World!"
-
 name: CSCI5300 Build Runner
 
 on:
@@ -23,7 +9,28 @@ on:
       - main
 
 jobs:
-  build:
+  client:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get Latest Code from Repo
+      uses: actions/checkout@v2
+    - name: Setup Node.Js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - name: Install Client Dependencies
+      run: npm install --prefix client
+    - name: Run Client Unit Tests
+      run: npm test --prefix client  # Run client unit tests
+    - name: Build Frontend
+      run: CI=false npm run build --prefix client
+    - name: Archive Client Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: client-build
+        path: client/build  # Adjust path as necessary
+
+  backend:
     runs-on: ubuntu-latest
     steps:
     - name: Get Latest Code from Repo
@@ -32,16 +39,26 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - name: Install Dependencies
+    - name: Install Backend Dependencies
+      run: npm install --prefix Backend  # Adjusted to match folder name
+    - name: Run Backend Unit Tests
+      run: npm test --prefix Backend  # Adjusted to match folder name
+    - name: Archive Backend Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: backend-artifacts
+        path: Backend/build  # Adjusted to match folder name
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [client, backend]  # Ensure this runs after client and backend jobs
+    steps:
+    - name: Deploy Frontend to GitHub Pages
       run: |
-        npm install
-        npm install --prefix client
-    - name: Install devDependencies
-      run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
-    - name: Build Frontend
+        echo "Deploying Frontend..."
+        echo "Frontend cannot be deployed on github pages."
+
+    - name: Deploy Backend (Optional)
       run: |
-        CI=false npm run build --prefix client
-    - name: Deploy
-      run: |
-        echo "Deploy steps go here"
-        echo "Hello, After successful Build!"
+        echo "Deploying Backend..."
+        echo "Backend cannot be deployed on github pages as github pages is only for static websites."

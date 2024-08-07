@@ -52,6 +52,14 @@ export const UserProvider = ({ children }) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
         }
     }, [state.token]);
+    useEffect(() => {
+        if (state.token) {
+            console.log("State after setting token: ", state);
+            // Fetch user data and dispatch actions to update state
+            axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+        }
+    }, [state.token]);
+
 
 
     const addIncome = async (incomeData) => {
