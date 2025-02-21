@@ -66,7 +66,7 @@ const Home = ({ user }) => {
       frequency: frequency,
     };
     axios
-      .post("http://localhost:5001/api/budget/expense", data)
+      .post("https://csci5300-project-easybudget.onrender.com/api/budget/expense", data)
       .then(() => {
         dispatch({
           type: "ADD_EXPENSE",
