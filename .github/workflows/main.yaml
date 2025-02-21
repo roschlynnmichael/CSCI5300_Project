@@ -25,7 +25,7 @@ jobs:
     - name: Build Frontend
       run: CI=false npm run build --prefix client
     - name: Archive Client Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: client-build
         path: client/build  # Adjust path as necessary
@@ -44,7 +44,7 @@ jobs:
     - name: Run Backend Unit Tests
       run: npm test --prefix Backend  # Adjusted to match folder name
     - name: Archive Backend Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: backend-artifacts
         path: Backend/build  # Adjusted to match folder name
