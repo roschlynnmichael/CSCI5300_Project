@@ -66,7 +66,7 @@ const Home = ({ user }) => {
       frequency: frequency,
     };
     axios
-      .post(API_URL, data)
+      .post("http://localhost:5001/api/budget/expense", data)
       .then(() => {
         dispatch({
           type: "ADD_EXPENSE",

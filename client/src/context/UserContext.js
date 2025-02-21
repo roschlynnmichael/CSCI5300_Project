@@ -61,7 +61,7 @@ export const UserProvider = ({ children }) => {
     }, [state.token]);
     const addIncome = async (incomeData) => {
         try {
-            await axios.post('http://localhost:5001/api/income', incomeData);
+            await axios.post('https://csci5300-project-easybudget.onrender.com/api/income', incomeData);
             dispatch({ type: 'ADD_INCOME', payload: incomeData });
             console.log("dispatched succesfully the amount: ",incomeData);
 
@@ -72,7 +72,7 @@ export const UserProvider = ({ children }) => {
 
     const addExpense = async (expenseData) => {
         try {
-            await axios.post('http://localhost:5001/api/expense', expenseData);
+            await axios.post('https://csci5300-project-easybudget.onrender.com/api/expense', expenseData);
             dispatch({ type: 'ADD_EXPENSE', payload: expenseData });
         } catch (error) {
             console.error('Error adding expense:', error);
@@ -81,7 +81,7 @@ export const UserProvider = ({ children }) => {
 
     const addSavingGoal = async (savingGoal) => {
         try {
-            await axios.post('http://localhost:5001/api/saving', savingGoal);
+            await axios.post('https://csci5300-project-easybudget.onrender.com/api/saving', savingGoal);
             dispatch({ type: 'ADD_GOAl', payload: savingGoal });
         } catch (error) {
             console.error('Error adding a saving goal:', error);

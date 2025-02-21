@@ -110,7 +110,7 @@ const SavingsGoal = () => {
     };
 
     axios
-      .post("http://localhost:5001/api/budget/saving", data)
+      .post("https://csci5300-project-easybudget.onrender.com/api/budget/saving", data)
       .then((response) => {
         dispatch({
           type: "ADD_GOAL",
