@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 
-const SavingsGoal = () => {
+const SavingsGoal = () => { 
   const { state, dispatch } = useContext(UserContext);
   const [showGoalForm, setShowGoalForm] = useState(false);
   const [goalAmount, setGoalAmount] = useState("");
@@ -12,7 +12,7 @@ const SavingsGoal = () => {
   const [showInfoBox, setShowInfoBox] = useState(false);
   const [infoBoxMessage, setInfoBoxMessage] = useState("");
 
-  useEffect(() => {
+  useEffect(() => { // Calculate monthly disposable income
     const calculateMonthlyTotals = (transactions) => {
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();

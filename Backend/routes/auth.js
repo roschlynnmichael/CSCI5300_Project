@@ -5,7 +5,7 @@ const cors = require('cors');
 const authMiddleware = require('../middleware/authMiddleware');
 const userController=require('../controllers/userController');
 
-router.use(cors({
+router.use(cors({ // Enable CORS for all routes
     origin: 'http://localhost:3000',
 }));
 

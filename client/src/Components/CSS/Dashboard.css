@@ -12,10 +12,6 @@ body, html {
   flex-direction: column;
   height: 100vh;
 }
-/* Main Content */
-
-/* Url for the color of navbar
-https://coolors.co/palette/ff99c8-fcf6bd-d0f4de-a9def9-e4c1f9 */
 
 .header {
     height: 80px;
@@ -27,9 +23,6 @@ https://coolors.co/palette/ff99c8-fcf6bd-d0f4de-a9def9-e4c1f9 */
     position: fixed;
   }
 
-  /* .header:hover {
-    background-color: #bc6c25;
-  } */
   
 .navbar{
   margin: 0 auto; /* This centers the navbar horizontally */
