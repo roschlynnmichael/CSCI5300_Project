@@ -12,11 +12,14 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://your-frontend-service.onrender.com'], // Replace with your actual frontend URL
+  credentials: true
+}));
 
 
 // Database connection
-mongoose.connect('mongodb+srv://abhilashkurapati2365:dxvQUrIl7pljoIfs@cluster0.rnwqv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
@@ -46,5 +49,16 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+const path = require('path');
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Catch-all handler to serve React's index.html for any route not handled by backend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 

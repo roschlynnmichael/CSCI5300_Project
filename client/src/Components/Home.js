@@ -38,8 +38,10 @@ const Home = ({ user }) => {
       description: description,
       frequency: frequency,
     };
+    
+    const API_URL = process.env.REACT_APP_API_URL;
     axios
-      .post("http://localhost:5001/api/budget/income", data)
+      .post(API_URL, data)
       .then(() => {
         dispatch({
           type: "ADD_INCOME",
@@ -64,7 +66,7 @@ const Home = ({ user }) => {
       frequency: frequency,
     };
     axios
-      .post("http://localhost:5001/api/budget/expense", data)
+      .post(API_URL, data)
       .then(() => {
         dispatch({
           type: "ADD_EXPENSE",
