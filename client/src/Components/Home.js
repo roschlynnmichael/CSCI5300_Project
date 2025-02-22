@@ -39,9 +39,9 @@ const Home = ({ user }) => {
       frequency: frequency,
     };
     
-    const API_URL = process.env.REACT_APP_API_URL;
+    
     axios
-      .post(API_URL, data)
+      .post("https://csci5300-project-easybudget.onrender.com/api/budget/income", data)
       .then(() => {
         dispatch({
           type: "ADD_INCOME",

@@ -45,7 +45,7 @@ const Login = () => {
                         <Components.Title>Sign In</Components.Title>
                         <Components.Input type='text' name='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)} required />
                         <Components.Input type='password' name='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        <Components.Anchor href = "register">Don't have an account? Sign Up!</Components.Anchor>
+                        <Components.Anchor href= "register">Don't have an account? Sign Up!</Components.Anchor>
                         <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
                         <Components.Button type="submit" disabled={!username || !password}>Sign In</Components.Button>
                     </Components.Form>
